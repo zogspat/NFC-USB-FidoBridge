@@ -293,7 +293,8 @@ retry_cmd:
                                 break;
                             }
                         }
-                        if (up_false) {
+                        // Only intercept if the card actually returned a successful FIDO2 payload (starts with 0x00)
+                        if (up_false && final_resp[0] == 0x00) {
                             debug_log("Intercepted SUCCESS response for up=false GetAssertion. Card illegally set UP=true. Returning 0x2B (UP_REQUIRED) instead!");
                             uint8_t err = 0x2B;
                             ctaphid_send_message(channel, cmd, &err, 1);
